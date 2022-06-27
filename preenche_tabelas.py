@@ -31,7 +31,7 @@ dose_dados = { "dados": [] }
 paciente_vacina_dose_dados = { "dados": [] }
 
 def preenche_dados ():
-	for dado in dados['dados']:
+	for dado in dados['hits']['hits']:
 		paciente = {}
 		fabricante = {}
 		vacina = {}
