@@ -23,53 +23,54 @@ paciente_sql = """CREATE TABLE Paciente (
 	idade INT,
 	endereco_cep VARCHAR(5),
 	endereco_uf VARCHAR(2),
+	fk_categoria_id INT,
 	UNIQUE(paciente_id),
-	PRIMARY KEY (paciente_id)
+	PRIMARY KEY (paciente_id),
+	FOREIGN KEY (fk_categoria_id) REFERENCES Categoria(categoria_id)
 )
 """
 
 fabricante_sql = """CREATE TABLE Fabricante (
+	fabricante_id INT AUTO_INCREMENT PRIMARY KEY,
 	nome VARCHAR(255),
-	CNPJ VARCHAR(255),
-	UNIQUE(nome),
-	PRIMARY KEY (nome)
+	CNPJ VARCHAR(255)
 )
 """
 
 vacina_sql = """CREATE TABLE Vacina (
-	vacina_id INT NOT NULL,
-	fk_fabricante_nome VARCHAR(255) NOT NULL,
+	vacina_id INT AUTO_INCREMENT PRIMARY KEY,
+	vacina_codigo INT NOT NULL,
+	fk_fabricante_id INT,
 	nome VARCHAR(255),
 	lote VARCHAR(255),
 	UNIQUE(vacina_id),
-	PRIMARY KEY (vacina_id),
-	FOREIGN KEY (fk_fabricante_nome) REFERENCES Fabricante(nome)
+	FOREIGN KEY (fk_fabricante_id) REFERENCES Fabricante(fabricante_id)
 )
 """
 
 categoria_sql = """CREATE TABLE Categoria (
 	categoria_id INT NOT NULL,
 	nome VARCHAR(255),
-	descricao VARCHAR(255),
 	UNIQUE(categoria_id),
+	UNIQUE(nome),
 	PRIMARY KEY (categoria_id)
 )
 """
 
 dose_sql = """CREATE TABLE Dose (
-	dose_id INT NOT NULL,
+	dose_id INT AUTO_INCREMENT PRIMARY KEY,
 	descricao_dose VARCHAR(255) NOT NULL,
-	PRIMARY KEY (dose_id)
+	num_dose VARCHAR(255),
+	fk_vacina_id INT NOT NULL,
+	FOREIGN KEY (fk_vacina_id) REFERENCES Vacina(vacina_id)
 )
 """
 
-paciente_vacina_dose_sql = """CREATE TABLE Paciente_Vacina_Dose (
+paciente_vacinado_sql = """CREATE TABLE Paciente_Vacinado (
 	data_aplicacao DATE,
-	fk_dose INT NOT NULL,
 	fk_vacina_id INT NOT NULL,
 	fk_paciente_id VARCHAR(255) NOT NULL,
-	PRIMARY KEY (fk_dose, fk_vacina_id, fk_paciente_id),
-	FOREIGN KEY (fk_dose) REFERENCES Dose(dose_id),
+	PRIMARY KEY (fk_vacina_id, fk_paciente_id),
 	FOREIGN KEY (fk_vacina_id) REFERENCES Vacina(vacina_id),
 	FOREIGN KEY (fk_paciente_id) REFERENCES Paciente(paciente_id)
 )
@@ -77,15 +78,15 @@ paciente_vacina_dose_sql = """CREATE TABLE Paciente_Vacina_Dose (
 
 def cria_tabelas():
 	cursor = db.cursor()
-	cursor.execute(paciente_sql)
-	print("Tabela Paciente criada com sucesso!")
 	cursor.execute(fabricante_sql)
 	print("Tabela Fabricante criada com sucesso!")
 	cursor.execute(vacina_sql)
 	print("Tabela Vacina criada com sucesso!")
 	cursor.execute(categoria_sql)
 	print("Tabela Categoria criada com sucesso!")
+	cursor.execute(paciente_sql)
+	print("Tabela Paciente criada com sucesso!")
 	cursor.execute(dose_sql)
 	print("Tabela Dose criada com sucesso!")
-	cursor.execute(paciente_vacina_dose_sql)
-	print("Tabela Paciente_Vacina_Dose criada com sucesso!")
+	cursor.execute(paciente_vacinado_sql)
+	print("Tabela Paciente_Vacinado criada com sucesso!")

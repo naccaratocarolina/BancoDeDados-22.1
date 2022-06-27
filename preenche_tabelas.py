@@ -30,107 +30,126 @@ categoria_dados = { "dados": [] }
 dose_dados = { "dados": [] }
 paciente_vacina_dose_dados = { "dados": [] }
 
-def insere_sem_repeticao (lista):
+def remove_repeticao (lista):
 	dados = []
 	for i in lista:
 		if i not in dados:
 			dados.append(i)
 	return dados
 
-def preenche_dados ():
+def preenche_dados_instancias ():
 	for dado in dados['hits']['hits']:
-
-		# Processa atributos de Paciente
-		paciente_id = dado['_source']['paciente_id']
-		data_nasc = dado['_source']['paciente_dataNascimento']
-		idade = dado['_source']['paciente_idade']
-		endereco_cep = dado['_source']['paciente_endereco_cep']
-		endereco_uf = dado['_source']['paciente_endereco_uf']
-		paciente = (paciente_id, data_nasc, idade, endereco_cep, endereco_uf)
 
 		# Processa atributos de Fabricante
 		nome = dado['_source']['vacina_fabricante_nome']
 		CNPJ = dado['_source']['vacina_fabricante_referencia']
 		fabricante = (nome, CNPJ)
 
-		# Processa atributos de Vacina
-		vacina_id = dado['_source']['vacina_codigo']
-		fk_fabricante_nome = dado['_source']['vacina_fabricante_nome']
-		nome = dado['_source']['vacina_nome']
-		lote = dado['_source']['vacina_lote']
-		vacina = (vacina_id, fk_fabricante_nome, nome, lote)
-
-		# Processa atributos de Categoria
-		categoria_id = dado['_source']['vacina_categoria_codigo']
-		nome = dado['_source']['vacina_categoria_nome']
-		descricao = dado['_source']['vacina_grupoAtendimento_nome']
-		categoria = (categoria_id, nome, descricao)
-
 		# Processa atributos de Dose
-		dose_id = dado['_source']['vacina_numDose']
 		descricao_dose = dado['_source']['vacina_descricao_dose']
-		dose = (dose_id, descricao_dose)
+		num_dose = dado['_source']['vacina_numDose']
+		dose = (descricao_dose, num_dose)
 
-		# Processa atributos de Paciente_Vacina_Dose
-		data_aplicacao = dado['_source']['vacina_dataAplicacao']
-		fk_dose = dado['_source']['vacina_numDose']
-		fk_vacina_id = dado['_source']['vacina_codigo']
-		fk_paciente_id = dado['_source']['paciente_id']
-		paciente_vacina_dose = (data_aplicacao, fk_dose, fk_vacina_id, fk_paciente_id)
-
-		pacientes_dados["dados"].append(paciente)
 		fabricante_dados["dados"].append(fabricante)
-		vacina_dados["dados"].append(vacina)
-		categoria_dados["dados"].append(categoria)
 		dose_dados["dados"].append(dose)
-		paciente_vacina_dose_dados["dados"].append(paciente_vacina_dose)
 
-		pacientes_dados["dados"] = insere_sem_repeticao(pacientes_dados["dados"])
-		fabricante_dados["dados"] = insere_sem_repeticao(fabricante_dados["dados"])
-		vacina_dados["dados"] = insere_sem_repeticao(vacina_dados["dados"])
-		categoria_dados["dados"] = insere_sem_repeticao(categoria_dados["dados"])
-		dose_dados["dados"] = insere_sem_repeticao(dose_dados["dados"])
-		paciente_vacina_dose_dados["dados"] = insere_sem_repeticao(paciente_vacina_dose_dados["dados"])
+		fabricante_dados["dados"] = remove_repeticao(fabricante_dados["dados"])
 
-paciente_sql = "INSERT INTO Paciente (paciente_id, data_nasc, idade, endereco_cep, endereco_uf) VALUES (%s, %s, %s, %s, %s)"
-fabricante_sql = "INSERT INTO Fabricante (nome, CNPJ) VALUES (%s, %s)"
-vacina_sql = "INSERT INTO Vacina (vacina_id, fk_fabricante_nome, nome, lote) VALUES (%s, %s)"
-categoria_sql = "INSERT INTO Categoria (categoria_id, nome, descricao) VALUES (%s, %s, %s)"
-dose_sql = "INSERT INTO Dose (dose_id, descricao_dose) VALUES (%s, %s)"
-paciente_vacina_dose_sql = "INSERT INTO Paciente_Vacina_Dose (data_aplicacao, fk_dose, fk_vacina_id, fk_paciente_id) VALUES (%s, %s)"
+paciente_insere_sql = "INSERT INTO Paciente (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, fk_categoria_id) VALUES (%s, %s, %s, %s, %s, %s)"
+fabricante_insere_sql = "INSERT INTO Fabricante (nome, CNPJ) VALUES (%s, %s)"
+vacina_insere_sql = "INSERT INTO Vacina (vacina_codigo, fk_fabricante_id, nome, lote) VALUES (%s, %s, %s, %s)"
+categoria_insere_sql = "INSERT INTO Categoria (categoria_id, nome) VALUES (%s, %s)"
+dose_insere_sql = "INSERT INTO Dose (descricao_dose, num_dose) VALUES (%s, %s)"
+paciente_vacina_dose_insere_sql = "INSERT INTO Paciente_Vacina_Dose (data_aplicacao, fk_dose, fk_vacina_id, fk_paciente_id) VALUES (%s, %s)"
 
-def insere_muitos ():
-	preenche_dados()
+fabricante_seleciona_sql = "SELECT fabricante_id FROM Fabricante WHERE nome=%s and CNPJ=%s"
+categoria_seleciona_sql = "SELECT categoria_id FROM Categoria WHERE nome=%s"
+
+def preenche_categoria_fabricante ():
+	preenche_dados_instancias()
 	cursor = db.cursor()
-
-	# Insere dados de Paciente
-	for dado in pacientes_dados["dados"]:
-		cursor.execute(paciente_sql, dado)
 
 	# Insere dados de Fabricante
 	for dado in fabricante_dados["dados"]:
-		cursor.execute(fabricante_sql, dado)
+		cursor.execute(fabricante_insere_sql, dado)
+
+	# Insere dados de Categoria
+	categoria_dados["dados"] = [
+		(1, "Comorbidades"),
+		(2, "Faixa Etária"),
+		(3, "Pessoas de 60 anos ou mais institucionalizadas"),
+		(4, "Forças Armadas (membros ativos)"),
+		(5, "Forças de Segurança e Salvamento"),
+		(6, "Povos e Comunidades Tradicionais"),
+		(7, "Povos Indígenas"),
+		(8, "Trabalhadores da Educação"),
+		(9, "Trabalhadores de Saúde"),
+		(10, "Trabalhadores de Transporte"),
+		(11, "Pessoas com Deficiência"),
+		(12, "Pessoas em Situação de Rua"),
+		(15, "População Privada de Liberdade"),
+		(16, "Trabalhadores Industriais"),
+		(21, "Gestantes"),
+		(25, "Puérperas"),
+	]
+	for dado in categoria_dados["dados"]:
+		cursor.execute(categoria_insere_sql, dado)
+
+	db.commit()
+	print('Fabricantes inseridos com sucesso!!')
+	print('Categorias inseridas com sucesso!!')
+
+def encontra_fabricante_id (atributos):
+	cursor = db.cursor()
+	cursor.execute(fabricante_seleciona_sql, atributos)
+	return cursor.fetchone()[0]
+
+def preenche_paciente ():
+	cursor = db.cursor()
+	for dado in dados['hits']['hits']:
+		# Pega as informacoes do paciente
+		paciente_id = dado['_source']['paciente_id']
+		data_nasc = dado['_source']['paciente_dataNascimento']
+		idade = dado['_source']['paciente_idade']
+		endereco_cep = dado['_source']['paciente_endereco_cep']
+		endereco_uf = dado['_source']['paciente_endereco_uf']
+
+		# Pega as informacoes da categoria
+		categoria_id = dado['_source']['vacina_categoria_codigo']
+
+		paciente = (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, categoria_id)
+		pacientes_dados["dados"].append(paciente)
+		pacientes_dados["dados"] = remove_repeticao(pacientes_dados["dados"])
+
+	# Insere dados de Paciente
+	for dado in pacientes_dados["dados"]:
+		cursor.execute(paciente_insere_sql, dado)
+
+	db.commit()
+	print('Pacientes inseridos com sucesso!!')
+
+def preenche_vacina ():
+	cursor = db.cursor()
+	for dado in dados['hits']['hits']:
+		# Pega as informacoes da vacina
+		vacina_codigo = dado['_source']['vacina_codigo']
+		nome = dado['_source']['vacina_nome']
+		lote = dado['_source']['vacina_lote']
+
+		# Pega as informacoes do fabricante
+		nome = dado['_source']['vacina_fabricante_nome']
+		CNPJ = dado['_source']['vacina_fabricante_referencia']
+		fabricante = (nome, CNPJ)
+
+		fk_fabricante_id = encontra_fabricante_id(fabricante)
+		vacina = (vacina_codigo, fk_fabricante_id, nome, lote)
+		vacina_dados["dados"].append(vacina)
 
 	# Insere dados de Vacina
 	for dado in vacina_dados["dados"]:
-		cursor.execute(vacina_sql, dado)
-
-	# Insere dados de Categoria
-	for dado in categoria_dados["dados"]:
-		cursor.execute(categoria_sql, dado)
-
-	# Insere dados de Dose
-	for dado in dose_dados["dados"]:
-		cursor.execute(dose_sql, dado)
-
-	# Insere dados de Paciente_Vacina_Dose
-	for dado in paciente_vacina_dose_dados["dados"]:
-		cursor.execute(paciente_vacina_dose_sql, dado)
+		cursor.execute(vacina_insere_sql, dado)
 
 	db.commit()
-	print('Valores inseridos com sucesso!!')
-
-preenche_dados()
-print(categoria_dados["dados"])
+	print('Vacinas inseridas com sucesso!!')
 
 f.close()
