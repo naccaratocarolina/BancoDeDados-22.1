@@ -22,7 +22,7 @@ db = mysql.connector.connect(
 f = open('data.json')
 dados = json.load(f)
 
-# Preenche valores a serem inseridos no banco
+# Inicializa valores a serem inseridos no banco
 pacientes_dados = { "dados": [] }
 fabricante_dados = { "dados": [] }
 vacina_dados = { "dados": [] }
@@ -57,13 +57,10 @@ def preenche_dados_instancias ():
 
 paciente_insere_sql = "INSERT INTO Paciente (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, fk_categoria_id) VALUES (%s, %s, %s, %s, %s, %s)"
 fabricante_insere_sql = "INSERT INTO Fabricante (nome, CNPJ) VALUES (%s, %s)"
-vacina_insere_sql = "INSERT INTO Vacina (vacina_codigo, fk_fabricante_id, nome, lote) VALUES (%s, %s, %s, %s)"
+vacina_insere_sql = "INSERT INTO Vacina (fk_fabricante_id, nome, lote) VALUES (%s, %s, %s)"
 categoria_insere_sql = "INSERT INTO Categoria (categoria_id, nome) VALUES (%s, %s)"
-dose_insere_sql = "INSERT INTO Dose (descricao_dose, num_dose) VALUES (%s, %s)"
-paciente_vacina_dose_insere_sql = "INSERT INTO Paciente_Vacina_Dose (data_aplicacao, fk_dose, fk_vacina_id, fk_paciente_id) VALUES (%s, %s)"
 
 fabricante_seleciona_sql = "SELECT fabricante_id FROM Fabricante WHERE nome=%s and CNPJ=%s"
-categoria_seleciona_sql = "SELECT categoria_id FROM Categoria WHERE nome=%s"
 
 def preenche_categoria_fabricante ():
 	preenche_dados_instancias()
@@ -132,7 +129,6 @@ def preenche_vacina ():
 	cursor = db.cursor()
 	for dado in dados['hits']['hits']:
 		# Pega as informacoes da vacina
-		vacina_codigo = dado['_source']['vacina_codigo']
 		nome = dado['_source']['vacina_nome']
 		lote = dado['_source']['vacina_lote']
 
@@ -142,8 +138,9 @@ def preenche_vacina ():
 		fabricante = (nome, CNPJ)
 
 		fk_fabricante_id = encontra_fabricante_id(fabricante)
-		vacina = (vacina_codigo, fk_fabricante_id, nome, lote)
+		vacina = (fk_fabricante_id, nome, lote)
 		vacina_dados["dados"].append(vacina)
+		vacina_dados["dados"] = remove_repeticao(vacina_dados["dados"])
 
 	# Insere dados de Vacina
 	for dado in vacina_dados["dados"]:

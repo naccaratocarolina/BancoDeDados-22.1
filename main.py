@@ -13,3 +13,7 @@ from preenche_tabelas import preenche_categoria_fabricante, preenche_paciente, p
 preenche_categoria_fabricante()
 preenche_paciente()
 preenche_vacina()
+
+from preenche_relacoes import preenche_dose, preenche_paciente_vacinado
+preenche_dose()
+preenche_paciente_vacinado()

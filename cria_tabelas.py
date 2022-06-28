@@ -39,7 +39,6 @@ fabricante_sql = """CREATE TABLE Fabricante (
 
 vacina_sql = """CREATE TABLE Vacina (
 	vacina_id INT AUTO_INCREMENT PRIMARY KEY,
-	vacina_codigo INT NOT NULL,
 	fk_fabricante_id INT,
 	nome VARCHAR(255),
 	lote VARCHAR(255),
