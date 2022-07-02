@@ -1,11 +1,21 @@
 # BancoDeDados-22.1
 
 ## Pre-requisitos
+- Instalar bibliotecas<br>
 ``` bash
 $ pip install mysql-connector-python
 ```
 ``` bash
 $ pip install python-dotenv
+```
+- Configurar senha do mysql<br>
+``` bash
+$ mysql -u
+MariaDB [(none)]> use mysql;
+MariaDB [(none)]> set password for 'root'@'localhost' = password('YOUR_ROOT_PASSWORD_HERE');
+MariaDB [(none)]> flush privileges;
+MariaDB [(none)]> quit
+$ mysql -u root -p
 ```
 
 ## Setup

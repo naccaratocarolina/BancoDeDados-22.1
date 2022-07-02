@@ -66,10 +66,10 @@ dose_sql = """CREATE TABLE Dose (
 """
 
 paciente_vacinado_sql = """CREATE TABLE Paciente_Vacinado (
-	data_aplicacao DATE,
+	data_aplicacao DATE NOT NULL,
 	fk_vacina_id INT NOT NULL,
 	fk_paciente_id VARCHAR(255) NOT NULL,
-	PRIMARY KEY (fk_vacina_id, fk_paciente_id),
+	PRIMARY KEY (data_aplicacao, fk_vacina_id, fk_paciente_id),
 	FOREIGN KEY (fk_vacina_id) REFERENCES Vacina(vacina_id),
 	FOREIGN KEY (fk_paciente_id) REFERENCES Paciente(paciente_id)
 )
