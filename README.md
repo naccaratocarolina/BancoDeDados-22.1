@@ -41,5 +41,5 @@ DB_PASSWORD=<sua senha>
 
 - Execute o arquivo principal ```main.py```<br>
 ``` bash
-$ python main.py
+$ python scripts/main.py
 ```
