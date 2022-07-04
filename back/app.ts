@@ -1,5 +1,4 @@
 require('dotenv').config();
-require('./middlewares/sequelize');
 import express, { Request, Response, NextFunction, Application } from 'express';
 import swaggerUi from "swagger-ui-express";
 import swaggerDoc from './swagger.json';

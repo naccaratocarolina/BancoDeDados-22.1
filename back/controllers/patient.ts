@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import Patient from "../models/patient";
+const Patient = require("../models/patient");
 import { Get, Post, Route, Body, Tags, Controller } from 'tsoa';
-import { PatientReturn } from "../controllers/handlers/patientTypes";
+import { PatientReturn, PatientCheck } from "../controllers/handlers/patientTypes";
 import { errorHandler } from "../middlewares/errorHandler";
-import { Attributes } from "sequelize/types";
+import connect from "../db/connect";
 
 @Route("/patient")
 @Tags("Paciente")
@@ -12,8 +12,7 @@ export class patientController extends Controller {
         super();
     }
 
-    private getPatientRawData (patient: Patient): PatientReturn {
-        let patientRaw = <Attributes<Patient>> patient.get('', { plain: true });
+    private getPatientRawData (patient: typeof Patient): PatientReturn {
         return {
             paciente_id: patient.paciente_id!,
             data_nasc: patient.data_nasc!,
@@ -22,37 +21,22 @@ export class patientController extends Controller {
             endereco_uf: patient.endereco_uf!,
             fk_categoria_id: patient.fk_categoria_id!
         };
-        return patientRaw;
     };
 
     @Get()
     async getAllPatients (
-    ): Promise<PatientReturn[]> {
+    ) {
         let ret: PatientReturn[] = [];
-        const patients = <Patient[]> await Patient.findAll().catch((err: Error) => {
-            throw new errorHandler('Patientdb',  err.toString());
-        });
+        const conn = await connect();
+        conn.query("SELECT * FROM Paciente", (err: Error, data: PatientReturn[]) => {
+            if (err) {
+                throw new errorHandler('Pacientedb', err.toString());
+            }
 
-        patients.forEach((k) => {
-            ret.push(this.getPatientRawData(k));
+            data.forEach((k) => {
+                console.log(k.paciente_id);
+            })
         });
-        
-        console.log(ret);
         return ret;
     };
-
-    @Get("{patientId}")
-    async getPatient (
-        patientId: string
-    ): Promise<PatientReturn> {
-        let patient = <Patient|null> await Patient.findByPk(patientId).catch((err: Error) => {
-            throw new errorHandler('Patientdb',  err.toString());
-        });
-
-        if (!patient) {
-            throw new errorHandler('Patientdb', 'Paciente nao existe!');
-        }
-
-        return this.getPatientRawData(patient);
-    }
 };

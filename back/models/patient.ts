@@ -1,35 +1,37 @@
-import { DataTypes, InferAttributes, InferCreationAttributes, CreationOptional } from "sequelize";
-import { Table, Column, Model, AutoIncrement, Default, AllowNull, PrimaryKey, HasMany } from "sequelize-typescript";
+import connect from "../db/connect";
+import { PatientReturn } from "../controllers/handlers/patientTypes";
+import { errorHandler } from "../middlewares/errorHandler";
 
-@Table({
-    tableName: 'Paciente',
-    timestamps: false,
-    freezeTableName: true
-})
-class Patient extends Model<InferAttributes<Patient>, InferCreationAttributes<Patient>> {
-    @PrimaryKey
-    @Column(DataTypes.STRING)
-    paciente_id!: string;
+class Patient {
+    public paciente_id: string;
+    public data_nasc: Date;
+    public idade: number;
+    public endereco_cep: string;
+    public endereco_uf: string;
+    public fk_categoria_id: number;
 
-    @AllowNull
-    @Column(DataTypes.DATEONLY)
-    data_nasc!: Date;
+    constructor (patient: PatientReturn) {
+        this.paciente_id = patient.paciente_id;
+        this.data_nasc = patient.data_nasc;
+        this.idade = patient.idade;
+        this.endereco_cep = patient.endereco_cep;
+        this.endereco_uf = patient.endereco_uf;
+        this.fk_categoria_id = patient.fk_categoria_id;
+        this.findAll = this.findAll.bind(this);
+    }
 
-    @AllowNull
-    @Column(DataTypes.INTEGER)
-    idade!: number;
-
-    @AllowNull
-    @Column(DataTypes.STRING(5))
-    endereco_cep!: string;
-
-    @AllowNull
-    @Column(DataTypes.STRING(2))
-    endereco_uf!: string;
-
-    @AllowNull
-    @Column(DataTypes.INTEGER)
-    fk_categoria_id!: number;
-};
+    findAll = async (): Promise<PatientReturn[]> => {
+        let ret: PatientReturn[] = [];
+        const conn = await connect();
+        conn.query("SELECT * FROM Paciente", (err: Error, data: PatientReturn[]) => {
+            if (err) {
+                throw new errorHandler('Pacientedb', err.toString());
+            }
+            console.log(data);
+            ret = data;
+        });
+        return ret;
+    };
+}
 
 export default Patient;
