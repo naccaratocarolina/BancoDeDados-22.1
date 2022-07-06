@@ -8,7 +8,13 @@ async function connect () {
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
     });
-    console.log("Connected!");
+
+    connection.connect(async (err: Error) => {
+        if (err) {
+            console.log("Falha na conexão do banco de dados! ", err);
+            return;
+        }
+    });
 
     return connection;
 }
