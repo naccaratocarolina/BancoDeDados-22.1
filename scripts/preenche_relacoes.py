@@ -30,6 +30,7 @@ categoria_dados = { "dados": [] }
 dose_dados = { "dados": [] }
 paciente_vacinado_dados = { "dados": [] }
 
+# Queries
 dose_insere_sql = "INSERT INTO Dose (descricao_dose, num_dose, fk_vacina_id) VALUES (%s, %s, %s)"
 paciente_vacinado_insere_sql = "INSERT INTO Paciente_Vacinado (data_aplicacao, fk_vacina_id, fk_paciente_id) VALUES (%s, %s, %s)"
 vacina_seleciona_sql = "SELECT vacina_id FROM Vacina WHERE lote=%s and fk_fabricante_id=%s"

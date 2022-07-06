@@ -30,6 +30,25 @@ categoria_dados = { "dados": [] }
 dose_dados = { "dados": [] }
 paciente_vacina_dose_dados = { "dados": [] }
 
+# Queries
+paciente_insere_sql = "INSERT INTO Paciente (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, fk_categoria_id) VALUES (%s, %s, %s, %s, %s, %s)"
+fabricante_insere_sql = "INSERT INTO Fabricante (nome, CNPJ, logo) VALUES (%s, %s, %s)"
+vacina_insere_sql = "INSERT INTO Vacina (fk_fabricante_id, nome, lote) VALUES (%s, %s, %s)"
+categoria_insere_sql = "INSERT INTO Categoria (categoria_id, nome, descricao) VALUES (%s, %s, %s)"
+fabricante_seleciona_sql = "SELECT fabricante_id FROM Fabricante WHERE nome=%s and CNPJ=%s"
+
+def converteParaFormatoBinario (arquivo):
+	with open(arquivo, 'rb') as file:
+		dadoBinario = file.read()
+	return dadoBinario
+
+def preencheLogoConformeFab (nome):
+	dirlist = os.listdir("./imagens/fabricantes") 
+	for i in dirlist:
+		arquivo = os.path.abspath(os.path.join("./imagens/fabricantes", i))
+		if nome in arquivo:
+			return converteParaFormatoBinario(arquivo)
+
 def remove_repeticao (lista):
 	dados = []
 	for i in lista:
@@ -43,7 +62,8 @@ def preenche_dados_instancias ():
 		# Processa atributos de Fabricante
 		nome = dado['_source']['vacina_fabricante_nome']
 		CNPJ = dado['_source']['vacina_fabricante_referencia']
-		fabricante = (nome, CNPJ)
+		logo = preencheLogoConformeFab(nome)
+		fabricante = (nome, CNPJ, logo)
 
 		# Processa atributos de Dose
 		descricao_dose = dado['_source']['vacina_descricao_dose']
@@ -55,13 +75,6 @@ def preenche_dados_instancias ():
 
 		fabricante_dados["dados"] = remove_repeticao(fabricante_dados["dados"])
 
-paciente_insere_sql = "INSERT INTO Paciente (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, fk_categoria_id) VALUES (%s, %s, %s, %s, %s, %s)"
-fabricante_insere_sql = "INSERT INTO Fabricante (nome, CNPJ) VALUES (%s, %s)"
-vacina_insere_sql = "INSERT INTO Vacina (fk_fabricante_id, nome, lote) VALUES (%s, %s, %s)"
-categoria_insere_sql = "INSERT INTO Categoria (categoria_id, nome) VALUES (%s, %s)"
-
-fabricante_seleciona_sql = "SELECT fabricante_id FROM Fabricante WHERE nome=%s and CNPJ=%s"
-
 def preenche_categoria_fabricante ():
 	preenche_dados_instancias()
 	cursor = db.cursor()
@@ -72,22 +85,33 @@ def preenche_categoria_fabricante ():
 
 	# Insere dados de Categoria
 	categoria_dados["dados"] = [
-		(1, "Comorbidades"),
-		(2, "Faixa Etária"),
-		(3, "Pessoas de 60 anos ou mais institucionalizadas"),
-		(4, "Forças Armadas (membros ativos)"),
-		(5, "Forças de Segurança e Salvamento"),
-		(6, "Povos e Comunidades Tradicionais"),
-		(7, "Povos Indígenas"),
-		(8, "Trabalhadores da Educação"),
-		(9, "Trabalhadores de Saúde"),
-		(10, "Trabalhadores de Transporte"),
-		(11, "Pessoas com Deficiência"),
-		(12, "Pessoas em Situação de Rua"),
-		(15, "População Privada de Liberdade"),
-		(16, "Trabalhadores Industriais"),
-		(21, "Gestantes"),
-		(25, "Puérperas"),
+		(1, "Comorbidades", 
+			"Pessoas que possuem comorbidades incluídas como prioritárias para vacinação"),
+		(2, "Faixa Etária", 
+			"Pessoas que estão de acordo com o calendário por idade"),
+		(3, "Pessoas de 60 anos ou mais institucionalizadas", 
+			"Pessoas que possuem mais de 60 anos e estao institucionalizadas"),
+		(4, "Forças Armadas (membros ativos)", 
+			"Marinha do Brasil, Exército Brasileiro e Força Aérea Brasileira"),
+		(5, "Forças de Segurança e Salvamento", 
+			"Bombeiro Civil, Militar, Guarda Municipal, Policial Rodoviário Federal, Civil, Federal e Militar"),
+		(6, "Povos e Comunidades Tradicionais", 
+			"Povos e Comunidades Tradicionais Ribeirinhas e Quilombolas"),
+		(7, "Povos Indígenas", 
+			"Povos Indígenas vivendo em Terras Indígenas"),
+		(8, "Trabalhadores da Educação", 
+			"Trabalhadores de Educação do Ensino Básico e Superior"),
+		(9, "Trabalhadores de Saúde", 
+			"Médico(a), Médico(a) Veterinário, Enfermeiro(a), Nutricionista, Dentista, Psicólogo, Outros"),
+		(10, "Trabalhadores de Transporte", 
+			"Caminhoneiros, Trabalhadores de Transporte Coletivo Rodoviário de Passageiros, Outros"),
+		(11, "Pessoas com Deficiência", 
+			"Pessoas com Deficiências Permanente Grave"),
+		(12, "Pessoas em Situação de Rua", "Pessoas em Situação de Rua"),
+		(15, "População Privada de Liberdade", "População Privada de Liberdade"),
+		(16, "Trabalhadores Industriais", "Trabalhadores Industriais"),
+		(21, "Gestantes", "Gestantes"),
+		(25, "Puérperas", "Puérperas"),
 	]
 	for dado in categoria_dados["dados"]:
 		cursor.execute(categoria_insere_sql, dado)
