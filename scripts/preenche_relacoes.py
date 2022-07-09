@@ -1,4 +1,4 @@
-from preenche_tabelas import encontra_fabricante_id, remove_repeticao
+from preenche_tabelas import encontra_fabricante_id
 from dotenv import load_dotenv
 import mysql.connector
 import json
@@ -31,43 +31,19 @@ dose_dados = { "dados": [] }
 paciente_vacinado_dados = { "dados": [] }
 
 # Queries
-dose_insere_sql = "INSERT INTO Dose (descricao_dose, num_dose, fk_vacina_id) VALUES (%s, %s, %s)"
-paciente_vacinado_insere_sql = "INSERT INTO Paciente_Vacinado (data_aplicacao, fk_vacina_id, fk_paciente_id) VALUES (%s, %s, %s)"
+paciente_vacinado_insere_sql = "INSERT INTO Paciente_Vacinado (data_aplicacao, fk_vacina_id, fk_paciente_id, fk_dose_id) VALUES (%s, %s, %s, %s)"
 vacina_seleciona_sql = "SELECT vacina_id FROM Vacina WHERE lote=%s and fk_fabricante_id=%s"
+dose_seleciona_sql = "SELECT dose_id FROM Dose WHERE descricao_dose=%s and num_dose=%s"
 
 def encontra_vacina_id (atributos):
 	cursor = db.cursor(buffered=True)
 	cursor.execute(vacina_seleciona_sql, atributos)
 	return cursor.fetchone()[0]
 
-def preenche_dose ():
-	cursor = db.cursor()
-	for dado in dados['hits']['hits']:
-		# Pega as informacoes da dose
-		descricao_dose = dado['_source']['vacina_descricao_dose']
-		num_dose = dado['_source']['vacina_numDose']
-
-		# Pega as informacoes do fabricante
-		nome = dado['_source']['vacina_fabricante_nome']
-		CNPJ = dado['_source']['vacina_fabricante_referencia']
-		fabricante = (nome, CNPJ)
-		fk_fabricante_id = encontra_fabricante_id(fabricante)
-
-		# Pega as informacoes da vacina
-		lote = dado['_source']['vacina_lote']
-		vacina = (lote, fk_fabricante_id)
-
-		fk_vacina_id = encontra_vacina_id(vacina)
-		dose = (descricao_dose, num_dose, fk_vacina_id)
-		dose_dados["dados"].append(dose)
-		dose_dados["dados"] = remove_repeticao(dose_dados["dados"])
-
-	# Insere dados de Dose
-	for dado in dose_dados["dados"]:
-		cursor.execute(dose_insere_sql, dado)
-
-	db.commit()
-	print('Doses inseridas com sucesso!!')
+def encontra_dose_id (atributos):
+	cursor = db.cursor(buffered=True)
+	cursor.execute(dose_seleciona_sql, atributos)
+	return cursor.fetchone()[0]
 
 def preenche_paciente_vacinado ():
 	cursor = db.cursor()
@@ -84,12 +60,18 @@ def preenche_paciente_vacinado ():
 		fabricante = (nome, CNPJ)
 		fk_fabricante_id = encontra_fabricante_id(fabricante)
 
+		# Pega as informacoes da dose
+		descricao_dose = dado['_source']['vacina_descricao_dose']
+		num_dose = dado['_source']['vacina_numDose']
+		dose = (descricao_dose, num_dose)
+		fk_dose_id = encontra_dose_id(dose)
+
 		# Pega as informacoes da vacina
 		lote = dado['_source']['vacina_lote']
 		vacina = (lote, fk_fabricante_id)
 		fk_vacina_id = encontra_vacina_id(vacina)
 
-		paciente_vacinado = (data_aplicacao, fk_vacina_id, fk_paciente_id)
+		paciente_vacinado = (data_aplicacao, fk_vacina_id, fk_paciente_id, fk_dose_id)
 		paciente_vacinado_dados["dados"].append(paciente_vacinado)
 
 	# Insere dados de Paciente_Vacinado
