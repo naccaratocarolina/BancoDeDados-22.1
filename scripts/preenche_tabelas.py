@@ -68,7 +68,7 @@ def preenche_dados_instancias ():
 
 		fabricante_dados["dados"].append(fabricante)
 
-		fabricante_dados["dados"] = remove_repeticao(fabricante_dados["dados"])
+	fabricante_dados["dados"] = remove_repeticao(fabricante_dados["dados"])
 
 def preenche_categoria_fabricante ():
 	preenche_dados_instancias()
@@ -135,7 +135,8 @@ def preenche_paciente ():
 
 		paciente = (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, categoria_id)
 		pacientes_dados["dados"].append(paciente)
-		pacientes_dados["dados"] = remove_repeticao(pacientes_dados["dados"])
+
+	pacientes_dados["dados"] = remove_repeticao(pacientes_dados["dados"])
 
 	# Insere dados de Paciente
 	for dado in pacientes_dados["dados"]:
@@ -159,7 +160,8 @@ def preenche_vacina ():
 		fk_fabricante_id = encontra_fabricante_id(fabricante)
 		vacina = (fk_fabricante_id, nome, lote)
 		vacina_dados["dados"].append(vacina)
-		vacina_dados["dados"] = remove_repeticao(vacina_dados["dados"])
+		
+	vacina_dados["dados"] = remove_repeticao(vacina_dados["dados"])
 
 	# Insere dados de Vacina
 	for dado in vacina_dados["dados"]:
