@@ -1,0 +1,193 @@
+{
+	"info": {
+		"_postman_id": "ece9b908-31a5-4ec4-be59-43ad93873876",
+		"name": "BD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Paciente por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/patient/001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"patient",
+						"001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vacinas e Fabricantes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/vaccineAndFab",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"vaccineAndFab"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pacientes e Categorias",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/patientAndCat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"patientAndCat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Paciente Doses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/patientDoses/001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"patientDoses",
+						"001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vacinas e Idades",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/vaccineAndAge",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"vaccineAndAge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TODO: Intersecao",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fabricantes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/fabricator",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"fabricator"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pacientes por Região",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/patientPerRegion",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"patientPerRegion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vacinas por Lote",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/vaccinePerBatch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"vaccinePerBatch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Doses por Fabricante",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/dosesPerFabricator",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"dosesPerFabricator"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
