@@ -16,6 +16,8 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.get('/patient', patient.findAll);
+
 app.get('/patient/:id', patient.findById);
 
 app.get('/vaccineAndFab', vaccine.findAllVaccineAndItsFab);
