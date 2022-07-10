@@ -15,6 +15,22 @@ exports.findAllVaccineAndItsFab = async (req: Request, res: Response) => {
     conn.end();
 };
 
+// Consulta envolvendo a junção de apenas três ou mais relações (INNER JOIN)
+exports.findAllVaccineAndAge = async (req: Request, res: Response) => {
+    const selection = "idade, Vacina.nome";
+    const first_condition = "Paciente_Vacinado.fk_paciente_id=Paciente.paciente_id";
+    const second_condition = "Vacina.vacina_id=Paciente_Vacinado.fk_vacina_id";
+
+    const conn = await connect();
+    conn.query(`SELECT ${selection} FROM Paciente_Vacinado INNER JOIN Paciente ON ${first_condition} INNER JOIN Vacina ON ${second_condition};`, (err, patients) => {
+        if (err) {
+            return res.json({success: false, error: err});
+        }
+        return res.json({success: true, data: patients});
+    });
+    conn.end();
+};
+
 // Consulta envolvendo funções de agregação (COUNT, GROUP BY)
 exports.countVaccineBatches = async (req: Request, res: Response) => {
     const conn = await connect();
