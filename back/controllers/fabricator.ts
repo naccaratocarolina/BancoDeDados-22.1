@@ -8,6 +8,8 @@ exports.findAll = async (req: Request, res: Response) => {
         if (err) {
             return res.json({success: false, error: err});
         }
+
+        fabricators.map((f: any) => f.logo = f.logo.toString('base64'));
         return res.json({success: true, data: fabricators});
     });
     conn.end();
