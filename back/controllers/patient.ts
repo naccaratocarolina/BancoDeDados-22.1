@@ -44,11 +44,13 @@ exports.findPatientsCategories = async (req: Request, res: Response) => {
 
 // Consulta envolvendo a junção de três relações
 exports.findPatientDoses = async (req: Request, res: Response) => {
-    const selection = "paciente_id, data_aplicacao, Dose.fk_vacina_id, dose_id, descricao_dose, num_dose, data_nasc";
-    const first_condition = `Paciente_Vacinado.fk_vacina_id=Dose.fk_vacina_id and fk_paciente_id="${req.params.id}"`;
+    const selection = "paciente_id, data_aplicacao, dose_id, descricao_dose, num_dose, data_nasc";
+    const first_condition = `Paciente_Vacinado.fk_dose_id=Dose.dose_id and fk_paciente_id="${req.params.id}"`;
     const second_condition = `paciente_id="${req.params.id}" and fk_paciente_id="${req.params.id}"`;
+    const third_condition = "Paciente_Vacinado.fk_vacina_id = Vacina.vacina_id"
+
     const conn = await connect();
-    conn.query(`SELECT ${selection} FROM Paciente_Vacinado INNER JOIN Dose ON ${first_condition} INNER JOIN Paciente ON ${second_condition};`, (err: Error, patient: any[]) => {
+    conn.query(`SELECT ${selection} FROM Paciente_Vacinado INNER JOIN Dose ON ${first_condition} INNER JOIN Paciente ON ${second_condition} INNER JOIN Vacina ON ${third_condition};`, (err: Error, patient: any[]) => {
         if (err) {
             return res.json({success: false, error: err});
         }
