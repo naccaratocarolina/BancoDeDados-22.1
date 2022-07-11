@@ -22,8 +22,6 @@ export function FabricatorsTableView(props) {
     return null;
   }
 
-  console.log(fabricators)
-
   return (
     <DataTable
       columns={columns}

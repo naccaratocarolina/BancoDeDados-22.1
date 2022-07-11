@@ -61,4 +61,10 @@ export class ApiService {
 
     return response.data.data;
   }
+
+  async getBatches() {
+    const response = await this.axios.get('/vaccineAndFab');
+
+    return response.data.data;
+  }
 }
