@@ -1,17 +1,26 @@
 import { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { PatientCategoriesView } from '../components/patient/PatientCategoriesView';
+import { PatientList } from '../components/patient/PatientList';
+import { PatientPerCountryStatesView } from '../components/patient/PatientPerCountryStatesView';
 
 import { ApiService } from '../services/ApiService';
 
 const apiService = new ApiService();
 
-export default function Patients() {
+export function Patients() {
   const [patientIds, setPatientIds] = useState([]);
+  const [patientCategories, setPatientCategories] = useState(undefined);
+  const [patientCountryStates, setPatientCountryStates] = useState(undefined);
 
   useEffect(() => {
     const fetchData = async () => {
       const patientIds = await apiService.getPatients();
+      const patientCategories = await apiService.getPatientCategories();
+      const patientCountryStates = await apiService.getPatientCountryStates();
+
       setPatientIds(patientIds);
+      setPatientCategories(patientCategories);
+      setPatientCountryStates(patientCountryStates);
     }
 
     fetchData();
@@ -19,17 +28,10 @@ export default function Patients() {
 
   return (
     <main style={{ padding: "1rem 0" }}>
-      <h2>Pacientes</h2>
+      <PatientCategoriesView categories={patientCategories} />
+      <PatientPerCountryStatesView countryStates={patientCountryStates} /> 
 
-      <ul>
-        { patientIds ? 
-         patientIds.map((patientId, idx) => 
-          <li key={idx}> 
-            <Link to={`/patient/${patientId}`}>{patientId}</Link>
-          </li>
-        ) : null }
-      </ul>
-
+      <PatientList patientIds={patientIds} />
     </main>
   );
 }

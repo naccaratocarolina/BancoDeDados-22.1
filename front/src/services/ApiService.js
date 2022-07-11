@@ -3,7 +3,7 @@ import axios from 'axios';
 export class ApiService {
   constructor() {
     this.axios = axios.create({
-      baseURL: 'http://localhost:3000/',
+      baseURL: process.env.REACT_APP_API_URL,
       timeout: 1000,
     })
   }
@@ -20,8 +20,44 @@ export class ApiService {
     return response.data.data[0];
   }
 
+  async getPatientCategories() {
+    const response = await this.axios.get('/patientAndCat');
+
+    return response.data.data;
+  }
+
+  async getPatientCountryStates() {
+    const response = await this.axios.get('/patientPerRegion');
+
+    return response.data.data;
+  }
+
   async getPatientDoses(id) {
     const response = await this.axios.get(`/patientDoses/${id}`);
+
+    return response.data.data;
+  }
+
+  async getVaccinesPerBatch() {
+    const response = await this.axios.get('/vaccinePerBatch');
+
+    return response.data.data;
+  }
+
+  async getVaccinesPerAge() {
+    const response = await this.axios.get('/vaccineAndAge');
+
+    return response.data.data;
+  }
+
+  async getDosesPerFabricator() {
+    const response = await this.axios.get('/dosesPerFabricator');
+
+    return response.data.data;
+  }
+
+  async getFabricators() {
+    const response = await this.axios.get('/fabricator');
 
     return response.data.data;
   }

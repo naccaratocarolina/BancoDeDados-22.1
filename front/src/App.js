@@ -14,6 +14,12 @@ export default function App() {
           <li>
             <Link to="/patients">Pacientes</Link>
           </li>
+          <li>
+            <Link to="/vaccines">Vacinas</Link>
+          </li>
+          <li>
+            <Link to="/fabricators">Fabricantes</Link>
+          </li>
         </ul>
       </nav>
     </div>

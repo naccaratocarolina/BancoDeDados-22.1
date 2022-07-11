@@ -6,7 +6,7 @@ import { ApiService } from '../services/ApiService';
 const apiService = new ApiService();
 
 
-export default function Patient() {
+export function Patient() {
   const { patientId } = useParams();
 
   const [patientDetails, setpatientDetails] = useState(undefined);
@@ -22,7 +22,7 @@ export default function Patient() {
     }
 
     fetchData();
-  }, []);
+  }, [patientId]);
 
   return (
     <main style={{ padding: "1rem 0" }}>
