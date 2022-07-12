@@ -112,6 +112,8 @@ def preenche_categoria_fabricante ():
 		(16, "Trabalhadores Industriais", "Trabalhadores Industriais"),
 		(21, "Gestantes", "Gestantes"),
 		(25, "Puérperas", "Puérperas"),
+		(94, "Trabalhadores de Limpeza Urbana", "Trabalhadores de limpeza urbana e manejo de resíduos sólidos"),
+		(114, "Outros", "Outros"),
 	]
 	for dado in categoria_dados["dados"]:
 		cursor.execute(categoria_insere_sql, dado)
@@ -127,6 +129,7 @@ def encontra_fabricante_id (atributos):
 
 def preenche_paciente ():
 	cursor = db.cursor()
+	i = 0
 	for dado in dados['hits']['hits']:
 		# Pega as informacoes do paciente
 		paciente_id = dado['_source']['paciente_id']

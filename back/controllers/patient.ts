@@ -3,25 +3,27 @@ import { PatientReturn } from "./handlers/types";
 import connect from "../db/connect";
 
 exports.findAll = async (req: Request, res: Response) => {
+    const sql = "SELECT * FROM Paciente";
     const conn = await connect();
-    conn.query("SELECT * FROM Paciente", (err, patients) => {
+    conn.query(sql, (err, patients) => {
         if (err) {
             return res.json({success: false, error: err});
         }
-        return res.json({success: true, data: patients});
+        return res.json({success: true, query: sql, data: patients});
     });
     conn.end();
 };
 
 // Consulta envolvendo apenas as operações de seleção e projeção
 exports.findById = async (req: Request, res: Response) => {
+    const sql = `SELECT * FROM Paciente WHERE paciente_id = "${req.params.id}"`;
     const conn = await connect();
-    conn.query("SELECT * FROM Paciente WHERE paciente_id = ?", [req.params.id], (err, patient: any[]) => {
+    conn.query(sql, (err: Error, patient: any[]) => {
         if (err) {
             return res.json({success: false, error: err});
         }
         if (patient.length) {
-            return res.json({success: true, data: patient});
+            return res.json({success: true, query: sql, data: patient});
         }
         return res.json({success: false, error: "Paciente nao encontrado!"});
     });
@@ -32,12 +34,13 @@ exports.findById = async (req: Request, res: Response) => {
 exports.findPatientsCategories = async (req: Request, res: Response) => {
     const selection = "paciente_id, nome";
     const on = "Paciente.fk_categoria_id = Categoria.categoria_id";
+    const sql = `SELECT ${selection} FROM Paciente LEFT OUTER JOIN Categoria ON ${on};`;
     const conn = await connect();
-    conn.query(`SELECT ${selection} FROM Paciente LEFT OUTER JOIN Categoria ON ${on};`, (err, patients) => {
+    conn.query(sql, (err, patients) => {
         if (err) {
             return res.json({success: false, error: err});
         }
-        return res.json({success: true, data: patients});
+        return res.json({success: true, query: sql, data: patients});
     });
     conn.end();
 };
@@ -47,13 +50,14 @@ exports.findPatientDoses = async (req: Request, res: Response) => {
     const selection = "paciente_id, data_aplicacao, Dose.fk_vacina_id, dose_id, descricao_dose, num_dose, data_nasc";
     const first_condition = `Paciente_Vacinado.fk_vacina_id=Dose.fk_vacina_id and fk_paciente_id="${req.params.id}"`;
     const second_condition = `paciente_id="${req.params.id}" and fk_paciente_id="${req.params.id}"`;
+    const sql = `SELECT ${selection} FROM Paciente_Vacinado INNER JOIN Dose ON ${first_condition} INNER JOIN Paciente ON ${second_condition};`;
     const conn = await connect();
-    conn.query(`SELECT ${selection} FROM Paciente_Vacinado INNER JOIN Dose ON ${first_condition} INNER JOIN Paciente ON ${second_condition};`, (err: Error, patient: any[]) => {
+    conn.query(sql, (err: Error, patient: any[]) => {
         if (err) {
             return res.json({success: false, error: err});
         }
         if (patient.length) {
-            return res.json({success: true, data: patient});
+            return res.json({success: true, query: sql, data: patient});
         }
         return res.json({success: false, error: "Paciente nao encontrado!"});
     });
@@ -62,12 +66,13 @@ exports.findPatientDoses = async (req: Request, res: Response) => {
 
 // Consulta envolvendo funções de agregação (COUNT, GROUP BY)
 exports.countPatientsByRegion = async (req: Request, res: Response) => {
+    const sql = "SELECT endereco_uf, COUNT(*) AS Quantidade from Paciente GROUP BY endereco_uf ORDER BY Quantidade DESC;";
     const conn = await connect();
-    conn.query("SELECT endereco_uf, COUNT(*) AS Quantidade from Paciente GROUP BY endereco_uf ORDER BY Quantidade DESC;", (err, data) => {
+    conn.query(sql, (err, data) => {
         if (err) {
             return res.json({success: false, error: err});
         }
-        return res.json({success: true, data: data});
+        return res.json({success: true, query: sql, data: data});
     });
     conn.end();
 };

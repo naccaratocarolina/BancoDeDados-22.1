@@ -91,3 +91,4 @@ def cria_tabelas():
 	print("Tabela Dose criada com sucesso!")
 	cursor.execute(paciente_vacinado_sql)
 	print("Tabela Paciente_Vacinado criada com sucesso!")
+	db.commit()
