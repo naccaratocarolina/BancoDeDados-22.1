@@ -6,19 +6,39 @@
 	},
 	"item": [
 		{
-			"name": "Paciente por ID",
+			"name": "Todos pacientes",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/patient/001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718",
+					"raw": "http://localhost:3000/patients/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"patient",
+						"patients",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Paciente por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/patients/001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"patients",
 						"001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718"
 					]
 				}
@@ -31,14 +51,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/vaccineAndFab",
+					"raw": "http://localhost:3000/vaccines",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"vaccineAndFab"
+						"vaccines"
 					]
 				}
 			},
@@ -50,14 +70,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/patientAndCat",
+					"raw": "http://localhost:3000/patients/categories",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"patientAndCat"
+						"patients",
+						"categories"
 					]
 				}
 			},
@@ -69,14 +90,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/patientDoses/001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718",
+					"raw": "http://localhost:3000/patients/doses/001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"patientDoses",
+						"patients",
+						"doses",
 						"001b26a4b6b3381bea938247f427c1d517e7daa244b3c238ac3fb0edf5bb6718"
 					]
 				}
@@ -89,14 +111,15 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/vaccineAndAge",
+					"raw": "http://localhost:3000/vaccines/ages",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"vaccineAndAge"
+						"vaccines",
+						"ages"
 					]
 				}
 			},
@@ -119,14 +142,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/fabricator",
+					"raw": "http://localhost:3000/fabricators",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"fabricator"
+						"fabricators"
 					]
 				}
 			},
@@ -138,14 +161,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/patientPerRegion",
+					"raw": "http://localhost:3000/patients/region/count",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"patientPerRegion"
+						"patients",
+						"region",
+						"count"
 					]
 				}
 			},
@@ -157,14 +182,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/vaccinePerBatch",
+					"raw": "http://localhost:3000/vaccines/batches/count",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"vaccinePerBatch"
+						"vaccines",
+						"batches",
+						"count"
 					]
 				}
 			},
@@ -176,14 +203,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/dosesPerFabricator",
+					"raw": "http://localhost:3000/fabricators/doses/count",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"dosesPerFabricator"
+						"fabricators",
+						"doses",
+						"count"
 					]
 				}
 			},

@@ -9,61 +9,61 @@ export class ApiService {
   }
 
   async getPatients() {
-    const response = await this.axios.get('/patient')
+    const response = await this.axios.get('/patients')
     
     return response.data.data.map(p => p.paciente_id) 
   }
 
   async getPatientDetails(id) {
-    const response = await this.axios.get(`/patient/${id}`);
+    const response = await this.axios.get(`/patients/${id}`);
 
     return response.data.data[0];
   }
 
   async getPatientCategories() {
-    const response = await this.axios.get('/patientAndCat');
+    const response = await this.axios.get('/patients/categories');
 
     return response.data.data;
   }
 
   async getPatientCountryStates() {
-    const response = await this.axios.get('/patientPerRegion');
+    const response = await this.axios.get('/patients/region/count');
 
     return response.data.data;
   }
 
   async getPatientDoses(id) {
-    const response = await this.axios.get(`/patientDoses/${id}`);
+    const response = await this.axios.get(`/patients/doses/${id}`);
 
     return response.data.data;
   }
 
   async getVaccinesPerBatch() {
-    const response = await this.axios.get('/vaccinePerBatch');
+    const response = await this.axios.get('/vaccines/batches/count');
 
     return response.data.data;
   }
 
   async getVaccinesPerAge() {
-    const response = await this.axios.get('/vaccineAndAge');
+    const response = await this.axios.get('/vaccines/ages');
 
     return response.data.data;
   }
 
   async getDosesPerFabricator() {
-    const response = await this.axios.get('/dosesPerFabricator');
+    const response = await this.axios.get('/fabricators/doses/count');
 
     return response.data.data;
   }
 
   async getFabricators() {
-    const response = await this.axios.get('/fabricator');
+    const response = await this.axios.get('/fabricators');
 
     return response.data.data;
   }
 
   async getBatches() {
-    const response = await this.axios.get('/vaccineAndFab');
+    const response = await this.axios.get('/vaccines');
 
     return response.data.data;
   }

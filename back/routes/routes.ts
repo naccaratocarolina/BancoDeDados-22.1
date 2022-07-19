@@ -17,9 +17,11 @@ router.delete('/patients/:id', PatientController.delete);
 
 // Rotas de Vacina
 router.get('/vaccines', VaccineController.findAllVaccineAndItsFab);
+router.get('/vaccines/ages', VaccineController.findAllVaccineAndAge);
 router.get('/vaccines/batches/count', VaccineController.countVaccineBatches);
 
 // Rotas de Fabricantes
 router.get('/fabricators', FabricatorController.findAll);
+router.get('/fabricators/doses/count', FabricatorController.countDosesByFabricator);
 
 module.exports = router;
