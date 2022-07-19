@@ -34,6 +34,7 @@ paciente_vacina_dose_dados = { "dados": [] }
 paciente_insere_sql = "INSERT INTO Paciente (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, fk_categoria_id) VALUES (%s, %s, %s, %s, %s, %s)"
 fabricante_insere_sql = "INSERT INTO Fabricante (nome, CNPJ, logo) VALUES (%s, %s, %s)"
 vacina_insere_sql = "INSERT INTO Vacina (fk_fabricante_id, nome, lote) VALUES (%s, %s, %s)"
+dose_insere_sql = "INSERT INTO Dose (descricao_dose, num_dose) VALUES (%s, %s)"
 categoria_insere_sql = "INSERT INTO Categoria (categoria_id, nome, descricao) VALUES (%s, %s, %s)"
 fabricante_seleciona_sql = "SELECT fabricante_id FROM Fabricante WHERE nome=%s and CNPJ=%s"
 
@@ -65,15 +66,9 @@ def preenche_dados_instancias ():
 		logo = preencheLogoConformeFab(nome)
 		fabricante = (nome, CNPJ, logo)
 
-		# Processa atributos de Dose
-		descricao_dose = dado['_source']['vacina_descricao_dose']
-		num_dose = dado['_source']['vacina_numDose']
-		dose = (descricao_dose, num_dose)
-
 		fabricante_dados["dados"].append(fabricante)
-		dose_dados["dados"].append(dose)
 
-		fabricante_dados["dados"] = remove_repeticao(fabricante_dados["dados"])
+	fabricante_dados["dados"] = remove_repeticao(fabricante_dados["dados"])
 
 def preenche_categoria_fabricante ():
 	preenche_dados_instancias()
@@ -143,7 +138,8 @@ def preenche_paciente ():
 
 		paciente = (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, categoria_id)
 		pacientes_dados["dados"].append(paciente)
-		pacientes_dados["dados"] = remove_repeticao(pacientes_dados["dados"])
+
+	pacientes_dados["dados"] = remove_repeticao(pacientes_dados["dados"])
 
 	# Insere dados de Paciente
 	for dado in pacientes_dados["dados"]:
@@ -167,7 +163,8 @@ def preenche_vacina ():
 		fk_fabricante_id = encontra_fabricante_id(fabricante)
 		vacina = (fk_fabricante_id, nome, lote)
 		vacina_dados["dados"].append(vacina)
-		vacina_dados["dados"] = remove_repeticao(vacina_dados["dados"])
+		
+	vacina_dados["dados"] = remove_repeticao(vacina_dados["dados"])
 
 	# Insere dados de Vacina
 	for dado in vacina_dados["dados"]:
@@ -175,5 +172,24 @@ def preenche_vacina ():
 
 	db.commit()
 	print('Vacinas inseridas com sucesso!!')
+
+def preenche_dose ():
+	cursor = db.cursor()
+	for dado in dados['hits']['hits']:
+		# Pega as informacoes da dose
+		descricao_dose = dado['_source']['vacina_descricao_dose']
+		num_dose = dado['_source']['vacina_numDose']
+
+		dose = (descricao_dose, num_dose)
+		dose_dados["dados"].append(dose)
+
+	dose_dados["dados"] = remove_repeticao(dose_dados["dados"])
+
+	# Insere dados de Dose
+	for dado in dose_dados["dados"]:
+		cursor.execute(dose_insere_sql, dado)
+
+	db.commit()
+	print('Doses inseridas com sucesso!!')
 
 f.close()

@@ -61,9 +61,7 @@ categoria_sql = """CREATE TABLE Categoria (
 dose_sql = """CREATE TABLE Dose (
 	dose_id INTEGER AUTO_INCREMENT PRIMARY KEY,
 	descricao_dose VARCHAR(255) NOT NULL,
-	num_dose VARCHAR(255),
-	fk_vacina_id INTEGER NOT NULL,
-	FOREIGN KEY (fk_vacina_id) REFERENCES Vacina(vacina_id)
+	num_dose VARCHAR(255)
 )
 """
 
@@ -71,9 +69,11 @@ paciente_vacinado_sql = """CREATE TABLE Paciente_Vacinado (
 	data_aplicacao DATE NOT NULL,
 	fk_vacina_id INTEGER NOT NULL,
 	fk_paciente_id VARCHAR(255) NOT NULL,
+	fk_dose_id INTEGER NOT NULL,
 	PRIMARY KEY (data_aplicacao, fk_vacina_id, fk_paciente_id),
 	FOREIGN KEY (fk_vacina_id) REFERENCES Vacina(vacina_id),
-	FOREIGN KEY (fk_paciente_id) REFERENCES Paciente(paciente_id)
+	FOREIGN KEY (fk_paciente_id) REFERENCES Paciente(paciente_id),
+	FOREIGN KEY (fk_dose_id) REFERENCES Dose(dose_id)
 )
 """
 
