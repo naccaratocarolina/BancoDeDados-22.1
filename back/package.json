@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "_prestart": "tsoa spec-and-routes",
-    "start": "ts-node app.ts",
-    "run-express": "ts-node run-express.ts"
+    "start": "ts-node app.ts"
   },
   "repository": {
     "type": "git",
