@@ -11,7 +11,7 @@ exports.findAllVaccineAndItsFab = async (req: Request, res: Response) => {
         if (err) {
             return res.json({success: false, error: err});
         }
-        return res.json({success: true, data: patients});
+        return res.json({success: true, query: sql, data: patients});
     });
     conn.end();
 };
@@ -22,12 +22,13 @@ exports.findAllVaccineAndAge = async (req: Request, res: Response) => {
     const first_condition = "Paciente_Vacinado.fk_paciente_id=Paciente.paciente_id";
     const second_condition = "Vacina.vacina_id=Paciente_Vacinado.fk_vacina_id";
 
+    const sql = `SELECT ${selection} FROM Paciente_Vacinado INNER JOIN Paciente ON ${first_condition} INNER JOIN Vacina ON ${second_condition};`;
     const conn = await connect();
-    conn.query(`SELECT ${selection} FROM Paciente_Vacinado INNER JOIN Paciente ON ${first_condition} INNER JOIN Vacina ON ${second_condition};`, (err, patients) => {
+    conn.query(sql, (err, patients) => {
         if (err) {
             return res.json({success: false, error: err});
         }
-        return res.json({success: true, data: patients});
+        return res.json({success: true, query: sql, data: patients});
     });
     conn.end();
 };
@@ -40,7 +41,7 @@ exports.countVaccineBatches = async (req: Request, res: Response) => {
         if (err) {
             return res.json({success: false, error: err});
         }
-        return res.json({success: true, data: data});
+        return res.json({success: true, query: sql, data: data});
     });
     conn.end();
 };
