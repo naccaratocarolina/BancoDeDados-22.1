@@ -1,5 +1,6 @@
-from preenche_tabelas import encontra_fabricante_id
+from preenche_tabelas import encontra_fabricante_id, remove_repeticao
 from dotenv import load_dotenv
+from dateutil import parser as date_parser
 import mysql.connector
 import json
 import os
@@ -49,7 +50,7 @@ def preenche_paciente_vacinado ():
 	cursor = db.cursor()
 	for dado in dados['hits']['hits']:
 		# Pega as informacoes do paciente vacinado
-		data_aplicacao = dado['_source']['vacina_dataAplicacao']
+		data_aplicacao = date_parser.parse(dado['_source']['vacina_dataAplicacao']).strftime('%Y-%m-%d')
 
 		# Pega as informacoes do paciente
 		fk_paciente_id = dado['_source']['paciente_id']
@@ -73,6 +74,7 @@ def preenche_paciente_vacinado ():
 
 		paciente_vacinado = (data_aplicacao, fk_vacina_id, fk_paciente_id, fk_dose_id)
 		paciente_vacinado_dados["dados"].append(paciente_vacinado)
+	paciente_vacinado_dados["dados"] = remove_repeticao(paciente_vacinado_dados["dados"])
 
 	# Insere dados de Paciente_Vacinado
 	for dado in paciente_vacinado_dados["dados"]:

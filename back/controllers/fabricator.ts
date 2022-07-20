@@ -10,7 +10,7 @@ exports.findAll = async (req: Request, res: Response) => {
             return res.json({success: false, error: err});
         }
 
-        fabricators.map((f: any) => f.logo = f.logo.toString('base64'));
+        fabricators.map((f: any) => f.logo = f.logo ? f.logo.toString('base64') : '');
         return res.json({success: true, query: sql, data: fabricators});
     });
     conn.end();

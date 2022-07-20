@@ -70,7 +70,7 @@ paciente_vacinado_sql = """CREATE TABLE Paciente_Vacinado (
 	fk_vacina_id INTEGER NOT NULL,
 	fk_paciente_id VARCHAR(255) NOT NULL,
 	fk_dose_id INTEGER NOT NULL,
-	PRIMARY KEY (data_aplicacao, fk_vacina_id, fk_paciente_id),
+	PRIMARY KEY (data_aplicacao, fk_vacina_id, fk_paciente_id, fk_dose_id),
 	FOREIGN KEY (fk_vacina_id) REFERENCES Vacina(vacina_id),
 	FOREIGN KEY (fk_paciente_id) REFERENCES Paciente(paciente_id),
 	FOREIGN KEY (fk_dose_id) REFERENCES Dose(dose_id)

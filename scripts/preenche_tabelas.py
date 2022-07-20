@@ -37,6 +37,7 @@ vacina_insere_sql = "INSERT INTO Vacina (fk_fabricante_id, nome, lote) VALUES (%
 dose_insere_sql = "INSERT INTO Dose (descricao_dose, num_dose) VALUES (%s, %s)"
 categoria_insere_sql = "INSERT INTO Categoria (categoria_id, nome, descricao) VALUES (%s, %s, %s)"
 fabricante_seleciona_sql = "SELECT fabricante_id FROM Fabricante WHERE nome=%s and CNPJ=%s"
+fabricante_seleciona_sem_cnpj_sql = "SELECT fabricante_id FROM Fabricante WHERE nome=%s and CNPJ is NULL"
 
 def converteParaFormatoBinario (arquivo):
 	with open(arquivo, 'rb') as file:
@@ -46,8 +47,9 @@ def converteParaFormatoBinario (arquivo):
 def preencheLogoConformeFab (nome):
 	dirlist = os.listdir("./imagens/fabricantes") 
 	for i in dirlist:
+		fabricante = i.replace('.png', '')
 		arquivo = os.path.abspath(os.path.join("./imagens/fabricantes", i))
-		if nome in arquivo:
+		if fabricante in nome:
 			return converteParaFormatoBinario(arquivo)
 
 def remove_repeticao (lista):
@@ -119,12 +121,36 @@ def preenche_categoria_fabricante ():
 
 def encontra_fabricante_id (atributos):
 	cursor = db.cursor()
-	cursor.execute(fabricante_seleciona_sql, atributos)
+	cnpj = atributos[1]
+	if cnpj is None:
+		cursor.execute(fabricante_seleciona_sem_cnpj_sql, [ atributos[0] ])
+	else:
+		cursor.execute(fabricante_seleciona_sql, atributos)
 	return cursor.fetchone()[0]
+
+def pega_melhor_valor(a, b):
+	if b is None or b == "None" or b == "" or b == "XX":
+		return a
+
+	return b
+
+def merge_paciente(a, b):
+	if a == b:
+		return a
+
+	paciente_id = a[0]
+	data_nasc = pega_melhor_valor(a[1], b[1])
+	idade = pega_melhor_valor(a[2], b[2])
+	endereco_cep = pega_melhor_valor(a[3], b[3])
+	endereco_uf = pega_melhor_valor(a[4], b[4])
+	categoria_id = pega_melhor_valor(a[5], b[5])
+
+	return (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, categoria_id)
 
 def preenche_paciente ():
 	cursor = db.cursor()
-	i = 0
+
+	pacientes = {}
 	for dado in dados['hits']['hits']:
 		# Pega as informacoes do paciente
 		paciente_id = dado['_source']['paciente_id']
@@ -137,9 +163,13 @@ def preenche_paciente ():
 		categoria_id = dado['_source']['vacina_categoria_codigo']
 
 		paciente = (paciente_id, data_nasc, idade, endereco_cep, endereco_uf, categoria_id)
-		pacientes_dados["dados"].append(paciente)
 
-	pacientes_dados["dados"] = remove_repeticao(pacientes_dados["dados"])
+		if paciente_id in pacientes:
+			pacientes[paciente_id] = merge_paciente(pacientes[paciente_id], paciente)
+		else:
+			pacientes[paciente_id] = paciente
+
+	pacientes_dados["dados"] = list(pacientes.values())
 
 	# Insere dados de Paciente
 	for dado in pacientes_dados["dados"]:

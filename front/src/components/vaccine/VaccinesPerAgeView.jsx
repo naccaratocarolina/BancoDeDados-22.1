@@ -85,7 +85,7 @@ export function VaccinesPerAgeView(props) {
   
   return (
     <div>
-      <h2>Quantidade de vacinas por lote</h2>
+      <h2>Quantidade de vacinas por idade</h2>
       <Line options={options} data={data} />
     </div>
     )
