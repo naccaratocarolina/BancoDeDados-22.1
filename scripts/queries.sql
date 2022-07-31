@@ -20,15 +20,18 @@ SELECT idade, Vacina.nome
     INNER JOIN Vacina ON Vacina.vacina_id=Paciente_Vacinado.fk_vacina_id;
 
 -- 1 consulta envolvendo uma das operações sobre conjuntos (união, diferença ou intersecção)
+(SELECT 'Min' AS Tipo, fk_categoria_id, COUNT(fk_categoria_id) AS Quantidade FROM Paciente GROUP BY fk_categoria_id ORDER BY COUNT(fk_categoria_id) DESC LIMIT 1)
+UNION
+(SELECT 'Max' AS Tipo, fk_categoria_id, COUNT(fk_categoria_id) AS Quantidade FROM Paciente GROUP BY fk_categoria_id ORDER BY COUNT(fk_categoria_id) ASC LIMIT 1);
 
 -- 3 consultas envolvendo funções de agregação
-SELECT nome, CNPJ FROM Fabricante GROUP BY nome; -- Nâo está faltando um COUNT ?
+SELECT nome, CNPJ FROM Fabricante GROUP BY nome;
 
-SELECT endereco_uf, COUNT(*) AS Quantidade from Paciente GROUP BY endereco_uf ORDER BY Quantidade DESC;
+SELECT endereco_uf, COUNT(*) AS Quantidade FROM Paciente GROUP BY endereco_uf ORDER BY Quantidade DESC;
 
 SELECT lote, COUNT(*) AS Quantidade FROM Vacina GROUP BY lote ORDER BY Quantidade DESC;
 
 -- 1 consulta envolvendo subconsultas aninhadas
 
-select nome, count(*) from (
-select distinct F.nome, D.descricao_dose from Dose D left join Paciente_Vacinado PV on D.dose_id = PV.fk_dose_id left join Vacina V on PV.fk_vacina_id = V.vacina_id left join Fabricante F on V.fk_fabricante_id = F.fabricante_id) AS VacinasDoses group by nome
+SELECT nome, count(*) FROM (
+SELECT DISTINCT F.nome, D.descricao_dose FROM Dose D LEFT OUTER JOIN Paciente_Vacinado PV ON D.dose_id = PV.fk_dose_id LEFT OUTER JOIN Vacina V ON PV.fk_vacina_id = V.vacina_id LEFT OUTER JOIN Fabricante F ON V.fk_fabricante_id = F.fabricante_id) AS VacinasDoses GROUP BY nome

@@ -11,6 +11,7 @@ router.get('/patients/categories', PatientController.findPatientsCategories);
 router.get('/patients/:id', PatientController.findById);
 router.get('/patients/doses/:id', PatientController.findPatientDoses);
 router.get('/patients/region/count', PatientController.countPatientsByRegion);
+router.get('/patients/categories/stats/count', PatientController.getMaxAndMinVaccinated);
 router.post('/patients', PatientController.create);
 router.put('/patients/:id', PatientController.update);
 router.delete('/patients/:id', PatientController.delete);

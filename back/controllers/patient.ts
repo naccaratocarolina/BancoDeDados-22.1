@@ -79,6 +79,21 @@ exports.countPatientsByRegion = async (req: Request, res: Response) => {
     conn.end();
 };
 
+// 1 Consulta envolvendo uma das operações sobre conjuntos (união, diferença ou intersecção)
+exports.getMaxAndMinVaccinated = async (req: Request, res: Response) => {
+    const query1 = "(SELECT 'Min' AS Tipo, fk_categoria_id, COUNT(fk_categoria_id) AS Quantidade FROM Paciente GROUP BY fk_categoria_id ORDER BY COUNT(fk_categoria_id) DESC LIMIT 1)";
+    const query2 = "(SELECT 'Max' AS Tipo, fk_categoria_id, COUNT(fk_categoria_id) AS Quantidade FROM Paciente GROUP BY fk_categoria_id ORDER BY COUNT(fk_categoria_id) ASC LIMIT 1)";
+    const sql = `${query1} UNION ${query2};`;
+    const conn = await connect();
+    conn.query(sql, (err, data) => {
+        if (err) {
+            return res.json({success: false, error: err});
+        }
+        return res.json({success: true, query: sql, data: data});
+    });
+    conn.end();
+};
+
 exports.create = async (req: Request, res: Response) => {
     const newPatient: PatientReturn = {
         paciente_id: req.body.paciente_id,
