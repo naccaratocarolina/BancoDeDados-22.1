@@ -13,11 +13,9 @@ export default function Home(){
             <a href="/" className='title_main'>DataSus</a>
         </div>
         <div className='text_container'>
-            <text className='text_main'>Sistema Único de Saúde (SUS) é a denominação do sistema público de saúde brasileiro criado pela Constituição Federal de 1988.
-                Realiza desde atendimentos primários até procedimentos complexos e oferece atendimento de emergência para pessoas que sofrem acidentes
-                pelo Serviço de Atendimento Móvel de Urgência.  sistema de saúde brasileiro também fornece vacinas e remédios gratuitamente para pessoas
-                com diversas doenças e financia pesquisas na área de epidemiologia. Entre os países com mais de 200 milhões de habitantes, o Brasil é o
-                único que possui um sistema de saúde pública universal totalmente financiado pelo Estado.</text>
+            <text className='text_main'>Sistema Único de Saúde (SUS) é a denominação do sistema público de saúde brasileiro criado pela Constituição Federal de 1988. Realiza desde atendimentos primários até procedimentos complexos e oferece atendimento de emergência para pessoas que sofrem acidentes pelo Serviço de Atendimento Móvel de Urgência. </text>
+            <div className='square'></div>
+            <text className='text_main'> O sistema de saúde brasileiro também fornece vacinas e remédios gratuitamente para pessoascom diversas doenças e financia pesquisas na área de epidemiologia. Entre os países com mais de 200 milhões de habitantes, o Brasil é oúnico que possui um sistema de saúde pública universal totalmente financiado pelo Estado.</text>
         </div>
     </div>
 }

@@ -1,4 +1,5 @@
 *{
+    /* border: 1px solid red; */
     box-sizing: border-box;
 }
 
@@ -26,25 +27,29 @@ body {
 }
 
 .title_main{
-    size: 20vm;
     color: white;
     text-decoration: none;
+    font-size: 4rem;
 }
 
 .logo_main{
     display: flex;
-    align-self: center;
+    justify-content: space-between;
     height: 6rem;
-    width: 6rem;
 }
 
 .text_container{
+    margin: 0 auto;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 80%;
 }
 
 .text_main{
-    width: 60%;
+    text-justify: inter-word;
+    padding: 1rem, 2rem;
+    width: 40%;
     color: white;
     margin-bottom: 0;
     margin-top: 0;
@@ -52,4 +57,12 @@ body {
     line-height: 2;
     word-wrap: break-word;
     position: relative;
+    text-justify: auto;
+}
+
+.square{
+    background-color: white;
+    width: 1px;
+    height: 8rem;
+    padding:1rem, 2rem;
 }
