@@ -9,9 +9,15 @@ export class ApiService {
   }
 
   async getPatients() {
+    const patients = {};
     const response = await this.axios.get('/patients')
     
-    return response.data.data.map(p => p.paciente_id) 
+    let i = 0;
+    response.data.data.map((p) => {
+      patients[i++] = p;
+    })
+    
+    return patients; 
   }
 
   async getPatientDetails(id) {

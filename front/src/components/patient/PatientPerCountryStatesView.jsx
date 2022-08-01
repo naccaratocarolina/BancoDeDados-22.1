@@ -21,7 +21,7 @@ ChartJS.register(
 );
 
 export const options = {
-  responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       display: false,
@@ -57,7 +57,6 @@ export function PatientPerCountryStatesView(props) {
   
   return (
     <div>
-      <h2>Distribuição de pacientes por Estado</h2>
       <Bar options={options} data={chartData} />
     </div>
     )

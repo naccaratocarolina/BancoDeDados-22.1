@@ -3,6 +3,8 @@ import { PatientCategoriesView } from '../components/patient/PatientCategoriesVi
 import { PatientList } from '../components/patient/PatientList';
 import { PatientPerCountryStatesView } from '../components/patient/PatientPerCountryStatesView';
 
+import './patient.css';
+
 import { ApiService } from '../services/ApiService';
 
 const apiService = new ApiService();
@@ -28,9 +30,11 @@ export function Patients() {
 
   return (
     <main style={{ padding: "1rem 0" }}>
-      <PatientCategoriesView categories={patientCategories} />
-      <PatientPerCountryStatesView countryStates={patientCountryStates} /> 
-
+      <h1 id="paciente-titulo">Lista de Pacientes</h1>
+      <div id="graficos">
+        <div><PatientCategoriesView categories={patientCategories} /></div>
+        <div><PatientPerCountryStatesView countryStates={patientCountryStates} /></div>
+      </div>
       <PatientList patientIds={patientIds} />
     </main>
   );

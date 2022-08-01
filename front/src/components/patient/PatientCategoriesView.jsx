@@ -3,10 +3,7 @@ import { Doughnut } from 'react-chartjs-2';
 
 import { countArrObjectsByKey, getLabelsAndData, randomColors } from "../../utils";
 
-
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-
 
 export function PatientCategoriesView(props) {
   const { categories } = props;
@@ -33,9 +30,8 @@ export function PatientCategoriesView(props) {
   };
 
   return (
-      <div>
-        <h2>Distribuição de pacientes por Categorias</h2>
-        <Doughnut data={chartData} />
+      <div style={{ height: 400, width: '100%' }}>
+        <Doughnut width={"100%"} options={{ maintainAspectRatio: false }} data={chartData} />
       </div>
     )
   }
