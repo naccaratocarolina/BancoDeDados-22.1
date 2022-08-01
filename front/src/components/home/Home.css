@@ -1,0 +1,55 @@
+*{
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.main{
+    min-height:100%;
+    background:url(../../background.jpg);
+    background-size:cover;
+    box-shadow:inset 0 0 0 2000px hsla(192, 10%, 20%, 0.8); 
+}
+
+.headline{
+    margin-top: 6 vm;
+    height: 13vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 1rem;
+    text-decoration: none;
+    color: white;
+}
+
+.title_main{
+    size: 20vm;
+    color: white;
+    text-decoration: none;
+}
+
+.logo_main{
+    display: flex;
+    align-self: center;
+    height: 6rem;
+    width: 6rem;
+}
+
+.text_container{
+    display: flex;
+    align-items: center;
+}
+
+.text_main{
+    width: 60%;
+    color: white;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-size: 1.125rem;
+    line-height: 2;
+    word-wrap: break-word;
+    position: relative;
+}
