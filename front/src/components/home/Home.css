@@ -39,7 +39,7 @@ body {
 }
 
 .text_container{
-    margin: 0 auto;
+    margin: 2rem auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
