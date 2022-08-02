@@ -21,7 +21,7 @@ import {
   );
   
   export const options = {
-    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -58,7 +58,6 @@ import {
     
     return (
       <div>
-        <h2>Quantidade de vacinas por lote</h2>
         <Bar options={options} data={chartData} />
       </div>
       )

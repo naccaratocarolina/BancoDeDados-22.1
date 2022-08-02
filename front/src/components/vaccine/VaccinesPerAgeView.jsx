@@ -25,7 +25,7 @@ ChartJS.register(
 );
 
 export const options = {
-  responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: 'top',
@@ -85,7 +85,6 @@ export function VaccinesPerAgeView(props) {
   
   return (
     <div>
-      <h2>Quantidade de vacinas por lote</h2>
       <Line options={options} data={data} />
     </div>
     )

@@ -30,7 +30,7 @@ export function PatientCategoriesView(props) {
   };
 
   return (
-      <div style={{ height: 400, width: '100%' }}>
+      <div>
         <Doughnut width={"100%"} options={{ maintainAspectRatio: false }} data={chartData} />
       </div>
     )

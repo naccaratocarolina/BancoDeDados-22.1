@@ -23,9 +23,20 @@ export function Fabricators() {
   }, []);
 
   return (
-    <div>
-      <DosesPerFabricatorView dosesPerFabricator={dosesPerFabricator} />
+    <main style={{ padding: "1rem 0" }}>
+      <h1>Fabricantes</h1>
+      <div>
+        <div id="titulos">
+          <div><h2>Número de doses diferentes para cada fabricante</h2></div>
+        </div>
+        <div id="graficos">
+          <div>
+            <DosesPerFabricatorView dosesPerFabricator={dosesPerFabricator} />
+          </div>
+        </div>
+        
+      </div>
       <FabricatorsTableView fabricators={fabricators} />
-    </div>
+    </main>
     )
   }

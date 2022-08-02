@@ -5,6 +5,8 @@ import { VaccinesPerAgeView } from '../components/vaccine/VaccinesPerAgeView';
 
 import { ApiService } from '../services/ApiService';
 
+import './style.css';
+
 const apiService = new ApiService();
 
 export function Vaccines() {
@@ -27,10 +29,23 @@ export function Vaccines() {
   }, []);
 
   return (
-    <div>
-      <VaccinesPerBatchView vaccinesPerBatch={vaccinesPerBatch} />
-      <VaccinesPerAgeView vaccinesPerAge={vaccinesPerAge} />
+    <main style={{ padding: "1rem 0" }}>
+      <h1>Vacinas</h1>
+      <div>
+        <div id="titulos">
+          <div><h2>Quantidade de vacinas por idade</h2></div>
+          <div><h2>Quantidade de vacinas por lote</h2></div>
+        </div>
+        <div id="graficos">
+          <div>
+            <VaccinesPerAgeView vaccinesPerAge={vaccinesPerAge} />
+          </div>
+          <div>
+            <VaccinesPerBatchView vaccinesPerBatch={vaccinesPerBatch} />
+          </div>
+      </div>
+      </div>
       <BatchesTableView batches={batches} />
-    </div>
+    </main>
     )
   }
